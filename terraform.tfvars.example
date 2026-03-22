@@ -1,0 +1,9 @@
+proxmox_api_url   = "https://192.168.1.100:8006/api2/json"
+proxmox_api_token = "user@pam!tokenid=uuid"
+target_node       = "pve"
+template_vm_id    = 9000
+ssh_public_key    = "ssh-rsa AAAAB3Nza..."
+network_gateway   = "192.168.1.1"
+master_ip         = "192.168.1.101/24"
+worker_ips        = ["192.168.1.102/24", "192.168.1.103/24"]
+rke2_token        = "K108873f..."
