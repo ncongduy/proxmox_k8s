@@ -15,9 +15,16 @@ variable "target_node" {
   default     = "pve"
 }
 
-variable "template_vm_id" {
-  description = "The ID of the Cloud-init VM template to clone"
-  type        = number
+variable "datastore_id" {
+  description = "The Proxmox datastore where ISOs/images will be stored"
+  type        = string
+  default     = "local"
+}
+
+variable "vm_disk_datastore_id" {
+  description = "The Proxmox datastore where VM disks will be created"
+  type        = string
+  default     = "local-lvm"
 }
 
 variable "ssh_public_key" {
