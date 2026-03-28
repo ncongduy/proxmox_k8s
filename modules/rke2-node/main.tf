@@ -36,7 +36,7 @@ resource "proxmox_virtual_environment_vm" "node" {
   }
 
   agent {
-    enabled = true
+    enabled = false
   }
 
   cpu {
@@ -94,7 +94,7 @@ resource "proxmox_virtual_environment_vm" "node" {
       local.rke2_config_lines,
       [
         "sudo systemctl enable ${local.rke2_service}",
-        "sudo systemctl start ${local.rke2_service} --no-block",
+        "sudo systemctl start --no-block ${local.rke2_service}",
       ],
     )
   }
