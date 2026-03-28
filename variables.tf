@@ -16,7 +16,7 @@ variable "target_node" {
 }
 
 variable "datastore_id" {
-  description = "The Proxmox datastore where ISOs/images will be stored"
+  description = "The Proxmox datastore where snippets will be stored"
   type        = string
   default     = "local"
 }
@@ -25,6 +25,11 @@ variable "vm_disk_datastore_id" {
   description = "The Proxmox datastore where VM disks will be created"
   type        = string
   default     = "local-lvm"
+}
+
+variable "template_vm_id" {
+  description = "The VM ID of the Ubuntu cloud image template to clone from"
+  type        = number
 }
 
 variable "ssh_public_key" {
@@ -36,7 +41,6 @@ variable "rke2_token" {
   description = "The RKE2 registration token"
   type        = string
   sensitive   = true
-  default     = "my-secure-rke2-token"
 }
 
 variable "network_gateway" {
@@ -49,7 +53,37 @@ variable "master_ip" {
   type        = string
 }
 
-variable "worker_ips" {
-  description = "Static IPs for the worker nodes"
-  type        = list(string)
+variable "worker_ip" {
+  description = "Static IP for the worker node (e.g., 192.168.1.102/24)"
+  type        = string
+}
+
+variable "master_cores" {
+  description = "CPU cores for the master node"
+  type        = number
+  default     = 2
+}
+
+variable "master_memory" {
+  description = "Memory in MB for the master node"
+  type        = number
+  default     = 4096
+}
+
+variable "worker_cores" {
+  description = "CPU cores for each worker node"
+  type        = number
+  default     = 2
+}
+
+variable "worker_memory" {
+  description = "Memory in MB for each worker node"
+  type        = number
+  default     = 4096
+}
+
+variable "vm_disk_size" {
+  description = "Disk size for each VM in GB"
+  type        = number
+  default     = 20
 }

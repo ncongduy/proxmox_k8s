@@ -5,5 +5,14 @@ template_vm_id    = 9000
 ssh_public_key    = "ssh-rsa AAAAB3Nza..."
 network_gateway   = "192.168.1.1"
 master_ip         = "192.168.1.101/24"
-worker_ips        = ["192.168.1.102/24", "192.168.1.103/24"]
-rke2_token        = "K108873f..."
+worker_ip         = "192.168.1.102/24"
+rke2_token        = "your-secure-token-here"
+
+# Optional overrides (defaults shown):
+# datastore_id         = "local"
+# vm_disk_datastore_id = "local-lvm"
+# master_cores         = 2
+# master_memory        = 4096
+# worker_cores         = 2
+# worker_memory        = 4096
+# vm_disk_size         = 20
