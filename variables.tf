@@ -15,12 +15,6 @@ variable "target_node" {
   default     = "pve"
 }
 
-variable "datastore_id" {
-  description = "The Proxmox datastore where snippets will be stored"
-  type        = string
-  default     = "local"
-}
-
 variable "vm_disk_datastore_id" {
   description = "The Proxmox datastore where VM disks will be created"
   type        = string

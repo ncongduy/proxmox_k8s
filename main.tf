@@ -9,7 +9,7 @@ resource "proxmox_virtual_environment_vm" "rke2_master" {
   }
 
   agent {
-    enabled = true
+    enabled = false
   }
 
   cpu {
@@ -44,10 +44,28 @@ resource "proxmox_virtual_environment_vm" "rke2_master" {
 
     user_account {
       keys     = [var.ssh_public_key]
-      username = "ubuntu"
+      username = "devops"
     }
+  }
 
-    user_data_file_id = proxmox_virtual_environment_file.cloud_config_master.id
+  connection {
+    type        = "ssh"
+    user        = "devops"
+    private_key = file(pathexpand("~/.ssh/id_rsa"))
+    host        = split("/", var.master_ip)[0]
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get update -y",
+      "sudo apt-get install -y qemu-guest-agent",
+      "sudo systemctl enable --now qemu-guest-agent",
+      "curl -sfL https://get.rke2.io | sudo sh -",
+      "sudo mkdir -p /etc/rancher/rke2",
+      "echo 'token: ${var.rke2_token}' | sudo tee /etc/rancher/rke2/config.yaml",
+      "sudo systemctl enable rke2-server.service",
+      "sudo systemctl start rke2-server.service --no-block",
+    ]
   }
 }
 
@@ -57,12 +75,14 @@ resource "proxmox_virtual_environment_vm" "rke2_worker" {
   node_name   = var.target_node
   vm_id       = 211
 
+  depends_on = [proxmox_virtual_environment_vm.rke2_master]
+
   clone {
     vm_id = var.template_vm_id
   }
 
   agent {
-    enabled = true
+    enabled = false
   }
 
   cpu {
@@ -97,56 +117,28 @@ resource "proxmox_virtual_environment_vm" "rke2_worker" {
 
     user_account {
       keys     = [var.ssh_public_key]
-      username = "ubuntu"
+      username = "devops"
     }
-
-    user_data_file_id = proxmox_virtual_environment_file.cloud_config_worker.id
   }
-}
 
-resource "proxmox_virtual_environment_file" "cloud_config_master" {
-  content_type = "snippets"
-  datastore_id = var.datastore_id
-  node_name    = var.target_node
-
-  source_raw {
-    data      = <<-EOF
-#cloud-config
-package_update: true
-packages:
-  - qemu-guest-agent
-runcmd:
-  - systemctl enable --now qemu-guest-agent
-  - curl -sfL https://get.rke2.io | sh -
-  - mkdir -p /etc/rancher/rke2
-  - echo "token: ${var.rke2_token}" > /etc/rancher/rke2/config.yaml
-  - systemctl enable rke2-server.service
-  - systemctl start rke2-server.service
-EOF
-    file_name = "rke2-master-cloud-config.yaml"
+  connection {
+    type        = "ssh"
+    user        = "devops"
+    private_key = file(pathexpand("~/.ssh/id_rsa"))
+    host        = split("/", var.worker_ip)[0]
   }
-}
 
-resource "proxmox_virtual_environment_file" "cloud_config_worker" {
-  content_type = "snippets"
-  datastore_id = var.datastore_id
-  node_name    = var.target_node
-
-  source_raw {
-    data      = <<-EOF
-#cloud-config
-package_update: true
-packages:
-  - qemu-guest-agent
-runcmd:
-  - systemctl enable --now qemu-guest-agent
-  - curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sh -
-  - mkdir -p /etc/rancher/rke2
-  - echo "server: https://${split("/", var.master_ip)[0]}:9345" > /etc/rancher/rke2/config.yaml
-  - echo "token: ${var.rke2_token}" >> /etc/rancher/rke2/config.yaml
-  - systemctl enable rke2-agent.service
-  - systemctl start rke2-agent.service
-EOF
-    file_name = "rke2-worker-1-cloud-config.yaml"
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get update -y",
+      "sudo apt-get install -y qemu-guest-agent",
+      "sudo systemctl enable --now qemu-guest-agent",
+      "curl -sfL https://get.rke2.io | sudo INSTALL_RKE2_TYPE=agent sh -",
+      "sudo mkdir -p /etc/rancher/rke2",
+      "echo 'server: https://${split("/", var.master_ip)[0]}:9345' | sudo tee /etc/rancher/rke2/config.yaml",
+      "echo 'token: ${var.rke2_token}' | sudo tee -a /etc/rancher/rke2/config.yaml",
+      "sudo systemctl enable rke2-agent.service",
+      "sudo systemctl start rke2-agent.service --no-block",
+    ]
   }
 }

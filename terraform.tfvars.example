@@ -9,7 +9,6 @@ worker_ip         = "192.168.1.102/24"
 rke2_token        = "your-secure-token-here"
 
 # Optional overrides (defaults shown):
-# datastore_id         = "local"
 # vm_disk_datastore_id = "local-lvm"
 # master_cores         = 2
 # master_memory        = 4096
