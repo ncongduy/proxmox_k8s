@@ -1,10 +1,10 @@
 output "master_ip" {
-  value     = proxmox_virtual_environment_vm.rke2_master.initialization[0].ip_config[0].ipv4[0].address
+  value     = module.rke2_master.ip_address
   sensitive = true
 }
 
 output "worker_ip" {
-  value     = proxmox_virtual_environment_vm.rke2_worker.initialization[0].ip_config[0].ipv4[0].address
+  value     = module.rke2_worker.ip_address
   sensitive = true
 }
 

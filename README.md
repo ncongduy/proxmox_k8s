@@ -138,11 +138,16 @@ terraform destroy -var-file=./terraform.tfvars
 
 ```
 proxmox_k8s/
-├── main.tf                  # VM resources and provisioning
-├── provider.tf              # Proxmox provider configuration
-├── variables.tf             # Input variables with validation
-├── outputs.tf               # Output values
-├── terraform.tfvars.example # Example configuration
-├── .gitignore               # Excludes state, keys, and secrets
+├── modules/
+│   └── rke2-node/                  # Reusable VM + RKE2 setup module
+│       ├── main.tf                 # VM resource + provisioner logic
+│       ├── variables.tf            # role, IP, cores, memory, etc.
+│       └── outputs.tf              # VM IP, VM ID
+├── main.tf                         # Calls rke2-node module for master + worker
+├── provider.tf                     # Proxmox provider configuration
+├── variables.tf                    # Top-level input variables with validation
+├── outputs.tf                      # Cluster outputs
+├── terraform.tfvars.example        # Example configuration
+├── .gitignore                      # Excludes state, keys, and secrets
 └── README.md
 ```
