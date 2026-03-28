@@ -9,6 +9,15 @@ worker_ip         = "192.168.1.102/24"
 rke2_token        = "your-secure-token-here"
 
 # Optional overrides (defaults shown):
+# proxmox_insecure     = true
+# ssh_private_key_path = "~/.ssh/id_rsa"
+# rke2_version         = "v1.32.4+rke2r1"
+# network_bridge       = "vmbr0"
+# vm_username          = "devops"
+# master_vm_id         = 201
+# master_vm_name       = "rke2-master"
+# worker_vm_id         = 211
+# worker_vm_name       = "rke2-worker-1"
 # vm_disk_datastore_id = "local-lvm"
 # master_cores         = 2
 # master_memory        = 4096
