@@ -12,6 +12,8 @@ provider "proxmox" {
   api_token = var.proxmox_api_token
   insecure  = true
   ssh {
-    agent = true
+    agent       = true
+    username    = var.proxmox_ssh_username
+    private_key = file(pathexpand("~/.ssh/id_rsa"))
   }
 }

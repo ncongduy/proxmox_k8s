@@ -58,6 +58,12 @@ variable "worker_ip" {
   type        = string
 }
 
+variable "proxmox_ssh_username" {
+  description = "SSH username for the Proxmox node"
+  type        = string
+  default     = "root"
+}
+
 variable "master_cores" {
   description = "CPU cores for the master node"
   type        = number
