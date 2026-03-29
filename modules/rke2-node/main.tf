@@ -85,6 +85,7 @@ resource "proxmox_virtual_environment_vm" "node" {
   provisioner "remote-exec" {
     inline = concat(
       [
+        "cloud-init status --wait",
         "sudo apt-get update -y",
         "sudo apt-get install -y qemu-guest-agent",
         "sudo systemctl enable --now qemu-guest-agent",

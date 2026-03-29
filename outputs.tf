@@ -1,11 +1,11 @@
 output "master_ip" {
   value     = module.rke2_master.ip_address
-  sensitive = true
+  sensitive = false
 }
 
 output "worker_ip" {
   value     = module.rke2_worker.ip_address
-  sensitive = true
+  sensitive = false
 }
 
 output "kubeconfig_instruction" {
