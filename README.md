@@ -180,5 +180,10 @@ proxmox_k8s/
 ├── outputs.tf                      # Cluster outputs
 ├── terraform.tfvars.example        # Example configuration
 ├── .gitignore                      # Excludes state, keys, and secrets
+├── LICENSE                         # MIT License
 └── README.md
 ```
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
